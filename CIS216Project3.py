@@ -90,7 +90,7 @@ def PrintEmployeeInfo(EmployeeDetailList):
     PayRate = EmployeeList[4]
     TaxRate = EmployeeList [5]
     GrossPay, IncomeTax, NetPay = EmployeeOutputCalc(HoursWorked, PayRate, TaxRate)
-   
+
     print (FromDate, EndDate, EmployeeName, f"{HoursWorked:,.2f}",
     f"{PayRate:,.2f}", f"{GrossPay:,.2f}", f"{TaxRate:,.1%}",
     f"{IncomeTax:,.2f}", f"{NetPay:,.2f}")
@@ -118,33 +118,43 @@ def PrintTotals(EmployeeTotals):
 
 def WriteEmployeeInformation(employee):
   file = open("employeeinfo.txt", "a")
-  file.write('{}|{}|{}|{}|{}|{}\n'.format(employee[0], employee[1],
-  employee[2], employee[3], employee[4], employee[5]))
+  file.write('{}|{}|{}|{}|{}|{}\n'.format(employee[0],employee[1],employee[2],employee[3],employee[4],employee[5]))
 
 def GetFromDate():
   valid = False
   fromdate = ""
   while not valid:
-    fromdate = input("Enter From Date (mm/dd/yyyy): ")
+    fromdate = input("Enter From Date (yyyy/dd/mm): ")
     if (len(fromdate.split('/')) != 3 and fromdate.upper() !='ALL'):
       print("Invalid Date Format: ")
     else:
       valid = True
+      if fromdate.upper() != 'ALL':
+          fromdate = datetime.strptime(fromdate, '%m/%d/%Y').date()
+          fromdate = str(fromdate)
+      else:
+          fromdate = fromdate.upper()
       return fromdate
+  
 def ReadEmployeeInformation(fromdate):
   EmployeeDetailList = []
   file = open("employeeinfo.txt", "r")
   data = file.readlines()
   condition = True
-  if fromdate.upper() == 'ALL':
+  print(fromdate)
+  print("FromDate Check")
+  
+  if fromdate == 'ALL':
+    print(fromdate)
     condition = False
+  
   for employee in data:
     employee = [x.strip() for x in employee.strip().split("|")]
-  if not condition:
-    EmployeeDetailList.append([employee[0], employee[1], employee[2],float(employee[3]), float(employee[4]), float(employee[5])])
-  else:
-    if fromdate == employee[0]:
-      EmployeeDetailList.append([employee[0], employee[1], employee[2],float(employee[3]), float(employee[4]), float(employee[5])])
+    if not condition:
+      EmployeeDetailList.append([employee[0],employee[1],employee[2],float(employee[3]),float(employee[4]),float(employee[5])])
+    else:
+      if fromdate == employee[0]:
+        EmployeeDetailList.append([employee[0],employee[1],employee[2],float(employee[3]),float(employee[4]),float(employee[5])])
   return EmployeeDetailList
 
 
@@ -171,17 +181,13 @@ if __name__=="__main__":
   print((".........................................\n"))
   fromdate = GetFromDate()
   EmployeeDetailList = ReadEmployeeInformation(fromdate)
-    
+  PrintEmployeeInfo(EmployeeDetailList)
+  PrintTotals(EmployeeTotals)
+  print ("\nThank You for Using the System!\n\n")
 
-    
 
-PrintEmployeeInfo(EmployeeDetailList)
-PrintTotals(EmployeeTotals)
-print ("\nThank You for Using the System!\n\n")
-  
-    
-    
-    
-    
-    
-    
+
+
+
+
+
