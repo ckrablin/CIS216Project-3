@@ -176,8 +176,8 @@ if __name__=="__main__":
     PayRate = GetPayRate()
     TaxRate = GetTaxRate()
     EmployeeDetail = [FromDate, ToDate, EmployeeName, Hours, PayRate,TaxRate]
-    WriteEmployeeInformation(EmployeeDetail)
     AddAnother = addanother()
+    WriteEmployeeInformation(EmployeeDetail)
   print((".........................................\n"))
   fromdate = GetFromDate()
   EmployeeDetailList = ReadEmployeeInformation(fromdate)
